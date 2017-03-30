@@ -18,6 +18,7 @@ int main(int argc, const char * argv[])
   FilterChain filters;
 
   cv::Mat original;
+  cv::Mat processed;
 
 #if defined(USE_VIDEO_FILE)
   std::string filename = "./video_samples/sample.mp4";
@@ -30,7 +31,9 @@ int main(int argc, const char * argv[])
 #endif
 
   filters.add(new GrabFrame(original, &frameGrabber));
-  filters.add(new Display(original, "Original"));
+  filters.add(new GrayScale(original, processed));
+  filters.add(new BinaryThreshold(processed, 140));
+  filters.add(new Display(processed, "Processed"));
 
   do {
     if (!paused || step) {
