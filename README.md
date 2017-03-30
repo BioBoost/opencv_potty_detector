@@ -27,3 +27,7 @@ For this you will need to install gpac
 sudo apt-get update
 sudo apt-get install -y gpac
 ```
+
+## More info on OpenCV 3.2
+
+Checkout http://docs.opencv.org/3.2.0/ for more info on OpenCV 3.2
