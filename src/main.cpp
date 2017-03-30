@@ -33,7 +33,8 @@ int main(int argc, const char * argv[])
   filters.add(new GrabFrame(original, &frameGrabber));
   filters.add(new GrayScale(original, processed));
   filters.add(new BinaryThreshold(processed, 140));
-  filters.add(new Display(processed, "Processed"));
+  filters.add(new FindContours(processed, original, 400, 500));
+  filters.add(new Display(original, "original"));
 
   do {
     if (!paused || step) {

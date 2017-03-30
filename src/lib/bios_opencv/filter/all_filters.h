@@ -6,3 +6,4 @@
 #include "gaussian_blur.h"
 #include "gray_scale.h"
 #include "blur.h"
+#include "find_contours.h"
