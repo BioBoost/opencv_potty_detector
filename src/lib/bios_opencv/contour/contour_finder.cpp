@@ -78,7 +78,7 @@ namespace BiosOpenCV {
     char buffer[5];
     double scale = 0.5;
     for(size_t i = 0; i < contours.size(); i++) {
-      sprintf(buffer, "%d", i);
+      sprintf(buffer, "%zu", i);
       cv::putText(frame, buffer, centers[i], cv::FONT_HERSHEY_PLAIN, scale, ColorGenerator::cyan(), 1);
     }
   }
