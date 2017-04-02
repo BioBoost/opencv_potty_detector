@@ -7,3 +7,4 @@
 #include "gray_scale.h"
 #include "blur.h"
 #include "find_contours.h"
+#include "match_template.h"
