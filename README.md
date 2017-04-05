@@ -45,3 +45,10 @@ avconv -f video4linux2 -r 25 -s 640x480 -i /dev/video0 sample.avi
 ## More info on OpenCV 3.2
 
 Checkout http://docs.opencv.org/3.2.0/ for more info on OpenCV 3.2
+
+## Dependencies
+
+* [Install OpenCV on Raspberry Pi 3](docs/opencv_raspberry_pi_3.md)
+* [Install OpenCV on Ubuntu](docs/opencv_ubuntu.md)
+* [Install Mqtt](docs/mqtt.md)
+* [Install RaspiCam](docs/raspi_cam.md)
