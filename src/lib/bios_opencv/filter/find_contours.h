@@ -15,6 +15,9 @@ namespace BiosOpenCV {
 
     public:
       virtual void execute(void);
+
+    public:
+      std::vector<cv::Point2f> get_centers(void);
   };
 
 };

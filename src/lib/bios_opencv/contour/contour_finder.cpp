@@ -105,4 +105,7 @@ namespace BiosOpenCV {
     }
   }
 
+  std::vector<cv::Point2f> ContourFinder::get_centers(void) {
+    return centers;
+  }
 };

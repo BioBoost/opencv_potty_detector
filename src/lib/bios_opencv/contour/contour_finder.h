@@ -31,6 +31,9 @@ namespace BiosOpenCV {
       void filter_by_size(std::vector<std::vector<cv::Point>> * allContours, std::vector<cv::Vec4i> * allHierarchies);
       void determine_centers(void);
       void print_areas(void);
+
+    public:
+      std::vector<cv::Point2f> get_centers(void);
   };
 
 };

@@ -20,4 +20,8 @@ namespace BiosOpenCV {
     contourFinder.draw_indices(get_result());
   }
 
+  std::vector<cv::Point2f> FindContours::get_centers(void) {
+    return contourFinder.get_centers();
+  }
+
 };

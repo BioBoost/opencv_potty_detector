@@ -27,9 +27,18 @@ namespace BiosOpenCV {
     // else
     //   { matchLocation = maxLoc; }
     matchLocation = minLoc;
+    std::cout << "Match score: " << minVal << std::endl;
   }
 
   void TemplateMatcher::draw(cv::Mat& frame) {
     cv::rectangle(frame, matchLocation, cv::Point(matchLocation.x + templateImage.cols, matchLocation.y + templateImage.rows), ColorGenerator::yellow(), 2, 8, 0);
+  }
+
+  cv::Point TemplateMatcher::get_match_location(void) {
+    return matchLocation;
+  }
+
+  cv::Point TemplateMatcher::get_match_center(void) {
+    return matchLocation;
   }
 };

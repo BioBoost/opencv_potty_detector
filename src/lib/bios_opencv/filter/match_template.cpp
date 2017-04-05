@@ -22,4 +22,8 @@ namespace BiosOpenCV {
     templateMatcher.draw(get_result());
   }
 
+  cv::Point MatchTemplate::get_match_center(void) {
+    return templateMatcher.get_match_center();
+  }
+
 };

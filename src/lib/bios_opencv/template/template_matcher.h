@@ -1,7 +1,6 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
-#include <vector>
 
 namespace BiosOpenCV {
 
@@ -18,8 +17,9 @@ namespace BiosOpenCV {
       void match(const cv::Mat& frame);
       void draw(cv::Mat& frame);
 
-    private:
-
+    public:
+      cv::Point get_match_location(void);
+      cv::Point get_match_center(void);
 
   };
 

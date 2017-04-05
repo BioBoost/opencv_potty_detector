@@ -16,6 +16,9 @@ namespace BiosOpenCV {
 
     public:
       virtual void execute(void);
+
+    public:
+      cv::Point get_match_center(void);
   };
 
 };
