@@ -7,7 +7,7 @@ music, lights or other animations to be played as a reward.
 Check out https://github.com/99-bugs/toomanypeeps/ for more info on installing
 OpenCV and MQTT on a Raspberry Pi 3 .
 
-## Capturing a sample MP4 with the Raspberry Pi
+## Capturing a sample MP4 with the Raspberry Pi camera
 
 You can easily create a sample video file using the Raspberry Pi in an MP4 container
 using the commands listed below:
@@ -26,6 +26,20 @@ For this you will need to install gpac
 ```shell
 sudo apt-get update
 sudo apt-get install -y gpac
+```
+
+## Capturing a sample MP4 with the Raspberry Pi and a web camera
+
+For this you need to install avconv
+
+```shell
+sudo apt-get install libav-tools
+```
+
+Next you can capture a video using:
+
+```shell
+avconv -f video4linux2 -r 25 -s 640x480 -i /dev/video0 sample.avi
 ```
 
 ## More info on OpenCV 3.2

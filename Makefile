@@ -31,6 +31,13 @@ ifneq ($(USE_FILE),0)
 	CFLAGS += -DUSE_VIDEO_FILE=1
 endif
 
+## Compile and use web camera: make USE_WEBCAM=1
+## Then run program as ./bin/potty
+USE_WEBCAM=0
+ifneq ($(USE_WEBCAM),0)
+	CFLAGS += -DUSE_WEB_CAMERA=1
+endif
+
 # Name of executable output
 TARGET=potty
 SRCDIR=src
