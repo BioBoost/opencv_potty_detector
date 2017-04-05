@@ -2,11 +2,14 @@
 
 namespace BiosOpenCV {
 
-  WebCamera::WebCamera(void)
+  WebCamera::WebCamera(int width, int height)
   {
     if (!captureDevice.open(0)) {
       throw std::exception();
     }
+
+    captureDevice.set(cv::CAP_PROP_FRAME_WIDTH, width);
+    captureDevice.set(cv::CAP_PROP_FRAME_HEIGHT, height);
   }
 
   WebCamera::~WebCamera(void) {

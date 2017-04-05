@@ -10,7 +10,7 @@ namespace BiosOpenCV {
       cv::VideoCapture captureDevice;
 
     public:
-      WebCamera(void);
+      WebCamera(int width=640, int height=480);
       virtual ~WebCamera(void);
 
     public:

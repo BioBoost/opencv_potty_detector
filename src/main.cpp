@@ -2,11 +2,27 @@
 
 #include "lib/bios_opencv/frame_grabber/video_file.h"
 #include "lib/bios_opencv/frame_grabber/image_file.h"
+#include "lib/bios_opencv/frame_grabber/web_camera.h"
 #include "lib/bios_opencv/filter_chain/filter_chain.h"
 #include "lib/bios_opencv/filter/all_filters.h"
+#include "lib/mqtt/simple_mqtt_publisher.h"
 #include <ctime>
+#include <sstream>
 
 using namespace BiosOpenCV;
+using namespace BiosMqtt;
+
+SimpleMqttPublisher	mqttPublisher("tcp://mqtt.labict.be", "sdgfdgdgsdgtet3455465678");
+
+void report(int numberOfSecondsLost) {
+  std::stringstream ss;
+  ss << "{\"seconds_lost\": " << numberOfSecondsLost << "}";
+  std::string json = ss.str();
+
+  std::cout << "MQTT: " << json << std::endl;
+
+  mqttPublisher.publish(json, "pottydetector/timer");
+}
 
 
 // This should go into class of its own
@@ -20,6 +36,9 @@ void indicate_potty_is_tracked(void) {
   if (!pottyIsBeingTracked) {
     timeLost = double(cv::getTickCount()-startTime) / double(cv::getTickFrequency());
     std::cout << "Tracking potty - Lost for " << timeLost << " seconds" << std::endl;
+    if (timeLost >= 5 && timeLost <= 120) {
+      report(timeLost);
+    }
     startTime = cv::getTickCount();
   }
 
@@ -53,26 +72,29 @@ int main(int argc, const char * argv[])
   cv::Mat pottyTemplate;
 
 #if defined(USE_VIDEO_FILE)
-  std::string filename = "./video_samples/sample.mp4";
+  std::string filename = "./video_samples/sample.avi";
   if (argc >= 2) {
     filename = std::string(argv[1]);
   }
   VideoFile frameGrabber(filename);
   paused = true;
   std::cout << "Watch it. Video is currently paused. Press p to pause/unpause, s to step and esc to quit" << std::endl;
+#elif defined(USE_WEB_CAMERA)
+  WebCamera frameGrabber;
 #endif
 
-  ImageFile templateGrabber("./templates/potty_backplate_cropped.png");
+  ImageFile templateGrabber("./templates/potty_webcam_backplate.png");
   singleExecution.add(new GrabFrame(pottyTemplate, &templateGrabber));
   singleExecution.add(new GrayScale(pottyTemplate));
-  singleExecution.add(new Display(pottyTemplate, "Potty"));
   singleExecution.execute();
 
   filters.add(new GrabFrame(original, &frameGrabber));
+  filters.add(new Flip(original));
   filters.add(new GrayScale(original, grayscale));
-  filters.add(new BinaryThreshold(grayscale, processed, 140));
+  filters.add(new BinaryThreshold(grayscale, processed, 230));
+  filters.add(new Display(processed, "processed"));
 
-  FindContours findContours(processed, original, 400, 500);
+  FindContours findContours(processed, original, 130, 180);
   filters.add(&findContours);
 
   MatchTemplate templateMatcher(grayscale, original, pottyTemplate);
