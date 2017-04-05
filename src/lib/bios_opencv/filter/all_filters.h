@@ -8,3 +8,4 @@
 #include "blur.h"
 #include "find_contours.h"
 #include "match_template.h"
+#include "flip.h"
