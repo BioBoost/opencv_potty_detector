@@ -8,6 +8,8 @@
 #include "lib/mqtt/simple_mqtt_publisher.h"
 #include <ctime>
 #include <sstream>
+#include <chrono>
+#include <thread>
 
 using namespace BiosOpenCV;
 using namespace BiosMqtt;
@@ -18,12 +20,10 @@ void report(int numberOfSecondsLost) {
   std::stringstream ss;
   ss << "{\"seconds_lost\": " << numberOfSecondsLost << "}";
   std::string json = ss.str();
-
   std::cout << "MQTT: " << json << std::endl;
 
   mqttPublisher.publish(json, "pottydetector/timer");
 }
-
 
 // This should go into class of its own
 bool pottyIsBeingTracked = false;
@@ -77,7 +77,7 @@ int main(int argc, const char * argv[])
     filename = std::string(argv[1]);
   }
   VideoFile frameGrabber(filename);
-  paused = true;
+  paused = false;
   std::cout << "Watch it. Video is currently paused. Press p to pause/unpause, s to step and esc to quit" << std::endl;
 #elif defined(USE_WEB_CAMERA)
   WebCamera frameGrabber;
@@ -91,8 +91,8 @@ int main(int argc, const char * argv[])
   filters.add(new GrabFrame(original, &frameGrabber));
   filters.add(new Flip(original));
   filters.add(new GrayScale(original, grayscale));
-  filters.add(new BinaryThreshold(grayscale, processed, 230));
-  filters.add(new Display(processed, "processed"));
+  filters.add(new BinaryThreshold(grayscale, processed, 200));
+  // filters.add(new Display(processed, "processed"));
 
   FindContours findContours(processed, original, 130, 180);
   filters.add(&findContours);
@@ -100,7 +100,7 @@ int main(int argc, const char * argv[])
   MatchTemplate templateMatcher(grayscale, original, pottyTemplate);
   filters.add(&templateMatcher);
 
-  filters.add(new Display(original, "original"));
+  // filters.add(new Display(original, "original"));
 
   do {
     if (!paused || step) {
@@ -127,10 +127,16 @@ int main(int argc, const char * argv[])
         indicate_potty_is_lost();
       }
 
+#if defined(OUTPUT_FOR_WEB)
+      imwrite("web/processed.jpg", processed); // A JPG FILE IS BEING SAVED
+      imwrite("web/original.jpg", original); // A JPG FILE IS BEING SAVED
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+#endif
+
       step = false;
     }
 
-    char key = cv::waitKey(10);
+    char key = cv::waitKey(1000);
     if(key == 'p') {
       paused = !paused;
     } else if (key == 's') {
