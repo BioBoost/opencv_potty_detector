@@ -102,6 +102,8 @@ int main(int argc, const char * argv[])
 
   // filters.add(new Display(original, "original"));
 
+  mqttPublisher.set_retained(false);
+
   do {
     if (!paused || step) {
       filters.execute();
