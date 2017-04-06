@@ -3,35 +3,36 @@
 
 namespace BiosOpenCV {
 
-  TemplateMatcher::TemplateMatcher(const cv::Mat& templateImage)
+  TemplateMatcher::TemplateMatcher(const cv::Mat& templateImage, double threshold)
     : templateImage(templateImage) {
-
+      this->threshold = threshold;
+      isMatchFound = false;
   }
 
   void TemplateMatcher::match(const cv::Mat& frame) {
-    cv::Mat result;
+    cv::Mat result(frame.rows-templateImage.rows+1, frame.cols-templateImage.cols+1, CV_32FC1);
 
-    int result_cols =  frame.cols - templateImage.cols + 1;
-    int result_rows = frame.rows - templateImage.rows + 1;
+    cv::matchTemplate(frame, templateImage, result, cv::TM_CCOEFF_NORMED);
 
-    result.create(result_rows, result_cols, CV_32FC1);
-
-    cv::matchTemplate(frame, templateImage, result, cv::TM_SQDIFF);       //CV_TM_CCORR_NORMED
-
-    cv::normalize(result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
     double minVal; double maxVal; cv::Point minLoc; cv::Point maxLoc;
+    cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat());
 
-    minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc, cv::Mat());
-    // if( match_method  == TM_SQDIFF || match_method == TM_SQDIFF_NORMED )
-    //   { matchLocation = minLoc; }
-    // else
-    //   { matchLocation = maxLoc; }
-    matchLocation = minLoc;
-    std::cout << "Match score: " << minVal << std::endl;
+    isMatchFound = (maxVal >= threshold);
+    matchLocation = maxLoc;
+
+  #if defined(SHOW_DEBUG)
+    std::cout << "Match score: " << maxval << std::endl;
+  #endif
+  }
+
+  bool TemplateMatcher::is_match_found(void) {
+    return isMatchFound;
   }
 
   void TemplateMatcher::draw(cv::Mat& frame) {
-    cv::rectangle(frame, matchLocation, cv::Point(matchLocation.x + templateImage.cols, matchLocation.y + templateImage.rows), ColorGenerator::yellow(), 2, 8, 0);
+    if (isMatchFound) {
+      cv::rectangle(frame, matchLocation, cv::Point(matchLocation.x + templateImage.cols, matchLocation.y + templateImage.rows), ColorGenerator::yellow(), 2, 8, 0);
+    }
   }
 
   cv::Point TemplateMatcher::get_match_location(void) {

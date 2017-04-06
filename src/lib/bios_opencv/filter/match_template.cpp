@@ -2,13 +2,13 @@
 
 namespace BiosOpenCV {
 
-  MatchTemplate::MatchTemplate(const cv::Mat& original, cv::Mat& result, const cv::Mat& templateImage)
-    : ProcessFilter(original, result), templateMatcher(templateImage) {
+  MatchTemplate::MatchTemplate(const cv::Mat& original, cv::Mat& result, const cv::Mat& templateImage, double threshold)
+    : ProcessFilter(original, result), templateMatcher(templateImage, threshold) {
 
   }
 
-  MatchTemplate::MatchTemplate(cv::Mat& image, const cv::Mat& templateImage)
-    : MatchTemplate(image, image, templateImage) {
+  MatchTemplate::MatchTemplate(cv::Mat& image, const cv::Mat& templateImage, double threshold)
+    : MatchTemplate(image, image, templateImage, threshold) {
   }
 
   void MatchTemplate::execute(void) {
@@ -24,6 +24,10 @@ namespace BiosOpenCV {
 
   cv::Point MatchTemplate::get_match_center(void) {
     return templateMatcher.get_match_center();
+  }
+
+  bool MatchTemplate::is_match_found(void) {
+    return templateMatcher.is_match_found();
   }
 
 };

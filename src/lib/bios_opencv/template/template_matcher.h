@@ -8,10 +8,13 @@ namespace BiosOpenCV {
 
     private:
       const cv::Mat& templateImage;
+      double threshold;
+
+      bool isMatchFound;
       cv::Point matchLocation;
 
     public:
-      TemplateMatcher(const cv::Mat& templateImage);
+      TemplateMatcher(const cv::Mat& templateImage, double threshold=0.75);
 
     public:
       void match(const cv::Mat& frame);
@@ -20,6 +23,7 @@ namespace BiosOpenCV {
     public:
       cv::Point get_match_location(void);
       cv::Point get_match_center(void);
+      bool is_match_found(void);
 
   };
 
