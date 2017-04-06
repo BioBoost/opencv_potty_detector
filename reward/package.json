@@ -1,0 +1,25 @@
+{
+  "name": "OpenCV Potty Detector Reward",
+  "version": "1.0.0",
+  "description": "Plays an applause sound on potty detection",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BioBoost/opencv_potty_detector"
+  },
+  "author": "Nico De Witte <bioboost@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BioBoost/opencv_potty_detector/issues"
+  },
+  "homepage": "https://github.com/BioBoost/opencv_potty_detector#readme",
+  "dependencies": {
+    "mqtt": "^2.5.2",
+    "play-sound": "^1.1.1"
+  },
+  "devDependencies": {}
+}
