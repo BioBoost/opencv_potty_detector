@@ -20,9 +20,9 @@ namespace BiosOpenCV {
     isMatchFound = (maxVal >= threshold);
     matchLocation = maxLoc;
 
-  #if defined(SHOW_DEBUG)
+  // #if defined(SHOW_DEBUG)
     std::cout << "Match score: " << maxval << std::endl;
-  #endif
+  // #endif
   }
 
   bool TemplateMatcher::is_match_found(void) {
