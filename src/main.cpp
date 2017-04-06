@@ -36,7 +36,7 @@ void indicate_potty_is_tracked(void) {
   if (!pottyIsBeingTracked) {
     timeLost = double(cv::getTickCount()-startTime) / double(cv::getTickFrequency());
     std::cout << "Tracking potty - Lost for " << timeLost << " seconds" << std::endl;
-    if (timeLost >= 5 && timeLost <= 120) {
+    if (timeLost >= 6 && timeLost <= 120) {
       report(timeLost);
     }
     startTime = cv::getTickCount();
@@ -68,7 +68,6 @@ int main(int argc, const char * argv[])
 
   cv::Mat original;
   cv::Mat grayscale;
-  cv::Mat processed;
   cv::Mat pottyTemplate;
 
 #if defined(USE_VIDEO_FILE)
@@ -91,11 +90,6 @@ int main(int argc, const char * argv[])
   filters.add(new GrabFrame(original, &frameGrabber));
   filters.add(new Flip(original));
   filters.add(new GrayScale(original, grayscale));
-  filters.add(new BinaryThreshold(grayscale, processed, 200));
-  // filters.add(new Display(processed, "processed"));
-
-  FindContours findContours(processed, original, 130, 180);
-  filters.add(&findContours);
 
   MatchTemplate templateMatcher(grayscale, original, pottyTemplate);
   filters.add(&templateMatcher);
@@ -108,29 +102,13 @@ int main(int argc, const char * argv[])
     if (!paused || step) {
       filters.execute();
 
-      cv::Point2f matchLocation;
-      matchLocation.x = templateMatcher.get_match_center().x;
-      matchLocation.y = templateMatcher.get_match_center().y;
-
-      std::vector<cv::Point2f> centers = findContours.get_centers();
-
-      bool foundPotty = false;
-      for (size_t i = 0; i < centers.size(); i++) {
-        std::cout << "Distance [" << i << "] = " << (cv::norm(centers[i] - matchLocation)) << std::endl;
-        if (cv::norm(centers[i] - matchLocation) <= 25) {
-          std::cout << "Got match for " << i << " between template and blobs" << std::endl;
-          foundPotty = true;
-          indicate_potty_is_tracked();
-          break;
-        }
-      }
-
-      if (!foundPotty) {
+      if (templateMatcher.is_match_found()) {
+        indicate_potty_is_tracked();
+      } else {
         indicate_potty_is_lost();
       }
 
 #if defined(OUTPUT_FOR_WEB)
-      imwrite("web/processed.jpg", processed); // A JPG FILE IS BEING SAVED
       imwrite("web/original.jpg", original); // A JPG FILE IS BEING SAVED
       std::this_thread::sleep_for(std::chrono::milliseconds(500));
 #endif
@@ -138,7 +116,7 @@ int main(int argc, const char * argv[])
       step = false;
     }
 
-    char key = cv::waitKey(1000);
+    char key = cv::waitKey(10);
     if(key == 'p') {
       paused = !paused;
     } else if (key == 's') {
