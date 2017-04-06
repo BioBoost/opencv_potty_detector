@@ -98,6 +98,7 @@ int main(int argc, const char * argv[])
 
   mqttPublisher.set_retained(false);
 
+  double time_ = cv::getTickCount();
   do {
     if (!paused || step) {
       filters.execute();
@@ -114,6 +115,10 @@ int main(int argc, const char * argv[])
 #endif
 
       step = false;
+
+      double secondsElapsed = double ( cv::getTickCount() - time_ ) / double ( cv::getTickFrequency() );
+      std::cout << "FPS = " << (1.0/secondsElapsed ) << std::endl;
+      time_ = cv::getTickCount();
     }
 
     char key = cv::waitKey(10);
