@@ -21,7 +21,7 @@ namespace BiosOpenCV {
     matchLocation = maxLoc;
 
   // #if defined(SHOW_DEBUG)
-    std::cout << "Match score: " << maxval << std::endl;
+    std::cout << "Match score: " << maxVal << std::endl;
   // #endif
   }
 
