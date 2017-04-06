@@ -7,12 +7,12 @@ var garageState = ''
 var connected = false
 
 client.on('connect', () => {
-  client.subscribe('pottydetector/timer')
+  client.subscribe('pottydetector/lost')
 })
 
 client.on('message', (topic, message) => {
   switch (topic) {
-    case 'pottydetector/timer':
+    case 'pottydetector/lost':
       return handleTimer(message)
   }
   console.log('No handler for topic %s', topic)

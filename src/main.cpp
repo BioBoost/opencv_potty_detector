@@ -22,7 +22,7 @@ void report(int numberOfSecondsLost) {
   std::string json = ss.str();
   std::cout << "MQTT: " << json << std::endl;
 
-  mqttPublisher.publish(json, "pottydetector/timer");
+  mqttPublisher.publish(json, "pottydetector/lost");
 }
 
 // This should go into class of its own
