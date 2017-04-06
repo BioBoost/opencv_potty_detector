@@ -11,8 +11,6 @@ namespace BiosMqtt {
   class SimpleMqttPublisher
   {
     private:
-      static const bool RETAINED = true;
-
       MemoryPersistenceStore store;
       mqtt::client * client;
       Callback callback;
@@ -20,6 +18,7 @@ namespace BiosMqtt {
 
       std::string defaultTopic;
       bool isConnected;
+      bool retained;
 
     public:
       SimpleMqttPublisher(std::string address, std::string clientId);
@@ -31,8 +30,10 @@ namespace BiosMqtt {
 
     public:
       void set_default_topic(std::string topic);
+      void set_retained(bool retain);
       void publish(std::string message, std::string topic, QualityOfService qos=AT_MOST_ONCE);
       void publish(std::string message, QualityOfService qos=AT_MOST_ONCE);
+      void publish(std::string message);
       bool is_connected(void);
 
   };

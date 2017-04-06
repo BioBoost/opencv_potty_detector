@@ -14,6 +14,7 @@ namespace BiosMqtt {
     connectionOptions.set_clean_session(true);
 
     isConnected = false;
+		retained = true;
 
     connect();
   }
@@ -40,6 +41,10 @@ namespace BiosMqtt {
     this->defaultTopic = topic;
   }
 
+	void SimpleMqttPublisher::set_retained(bool retain) {
+		this->retained = retain;
+	}
+
   void SimpleMqttPublisher::publish(std::string message, QualityOfService qos) {
     publish(message, defaultTopic, qos);
   }
@@ -49,7 +54,7 @@ namespace BiosMqtt {
       std::cout << "Sending message..." << std::flush;
       mqtt::message_ptr pubmsg = std::make_shared<mqtt::message>(message);
       pubmsg->set_qos((int)(qos));
-      pubmsg->set_retained(RETAINED);
+      pubmsg->set_retained(retained);
       client->publish(topic, pubmsg);
       std::cout << "OK" << std::endl;
     }
