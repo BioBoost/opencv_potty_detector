@@ -116,9 +116,9 @@ int main(int argc, const char * argv[])
 
       step = false;
 
-      double secondsElapsed = double ( cv::getTickCount() - time_ ) / double ( cv::getTickFrequency() );
-      std::cout << "FPS = " << (1.0/secondsElapsed ) << std::endl;
-      time_ = cv::getTickCount();
+      // double secondsElapsed = double ( cv::getTickCount() - time_ ) / double ( cv::getTickFrequency() );
+      // std::cout << "FPS = " << (1.0/secondsElapsed ) << std::endl;
+      // time_ = cv::getTickCount();
     }
 
     char key = cv::waitKey(10);
